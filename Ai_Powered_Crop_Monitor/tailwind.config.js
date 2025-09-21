@@ -7,10 +7,17 @@ export default {
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   darkMode: "class",
-  theme: { extend: {} },
+  theme: { extend: {
+    fontFamily: {
+      sans: ["Inter", "sans-serif"],
+    },
+  } },
   plugins: [heroui(),    
      require('@tailwindcss/forms'),
      require('@tailwindcss/typography'),
      require('@tailwindcss/aspect-ratio'),
   ],
+
+
+
 };

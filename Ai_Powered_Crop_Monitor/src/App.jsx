@@ -1,27 +1,20 @@
 import { useState } from 'react'
 import React from 'react'
 import './index.css'
+import HeroSection from './components/HeroSection'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <h1>AI Powered Crop Monitor</h1>
-        <p>Welcome to the AI Powered Crop Monitor application!</p>
-        <p>This application helps farmers monitor their crops using advanced AI technologies.</p>
-        <button onClick={() => setCount((count) => count + 1)}>
-          Count is {count}
-        </button>
+    <HeroSection/>
+    <div className="container my-0 mx-auto mt-auto p-4 text-center">
+        <h2 className="text-2xl font-bold mt-10">Welcome to AI Powered Crop Monitor 🌱</h2>
+        <p className="mt-2 text-gray-700">
+          This application helps farmers monitor their crops using advanced AI technologies.
+        </p>
       </div>
-      <div className="fixed-bottom">
-        <p>© 2024 AI Powered Crop Monitor. All rights reserved.</p>
-      </div>
-      <div className='bg-blue-500 text-white p-4'>
-        <p>This is a colored border at the bottom of the page.</p>
-      </div>
-      
     </>
   )
 }
