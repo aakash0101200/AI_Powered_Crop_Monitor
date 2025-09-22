@@ -8,9 +8,5 @@ export default {
   ],
   darkMode: "class",
   theme: { extend: {} },
-  plugins: [heroui(),    
-     require('@tailwindcss/forms'),
-     require('@tailwindcss/typography'),
-     require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [heroui()],
 };
