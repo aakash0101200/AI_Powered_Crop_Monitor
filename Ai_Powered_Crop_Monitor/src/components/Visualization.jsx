@@ -53,7 +53,7 @@ export default function Visualization() {
       </div>
 
       {/* Visualization Tabs */}
-      <Card>
+      {/* <Card>
         <CardBody className="p-0">
           <Tabs 
             selectedKey={activeTab} 
@@ -145,7 +145,7 @@ export default function Visualization() {
             </Tab>
           </Tabs>
         </CardBody>
-      </Card>
+      </Card> */}
 
       {/* Summary Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -1,9 +1,42 @@
 import { Button } from "@heroui/react";
+import React from 'react';
+import {IoIosArrowDown} from 'react-icons/io';
 
-export default function HeroSection() {
+const HeroSection = () => {
   return (
-    <section className="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 min-h-screen flex items-center justify-center text-white overflow-hidden">
-      <div className="absolute inset-0 bg-black/20"></div>
+      
+      <div className="flex flex-col items-center justify-center h-full text-gray-800 mt-14">
+      {/* MODIFICATION: Responsive font size and updated text */}
+      <h1 className="text-4xl lg:text-5xl text-center font-bold leading-tight">
+        AI-Powered Insights for 
+        <br />
+        <span className="text-green-700">Precision Agriculture</span>
+      </h1>
+
+      {/* MODIFICATION: Updated paragraph text */}
+      <p className="text-gray-600 mt-4 max-w-lg ">
+        Our unified platform integrates remote sensing and sensor data to provide timely, field-level insights on crop health, soil conditions, and pest risks.
+      </p>
+
+      {/* MODIFICATION: Updated button text */}
+      <button className="mt-6 bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition-all">
+        Request a Demo
+      </button>
+      
+      <IoIosArrowDown className="text-3xl mt-4 text-white animate-bounce" />
+    </div>
+  );
+}
+export default HeroSection;
+
+{/* src/components/HeroSection.jsx 
+  
+  
+
+  
+  
+      // <section className="flex items-center justify-center text-white overflow-hidden">
+      {/* <div className="absolute inset-0 bg-black/20"></div>
       <div className="absolute inset-0 opacity-30" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }}></div>
@@ -72,7 +105,6 @@ export default function HeroSection() {
         <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
           <div className="w-1 h-3 bg-white/50 rounded-full mt-2"></div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </div> */}
+      
+    

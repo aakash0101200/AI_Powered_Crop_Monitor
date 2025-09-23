@@ -83,7 +83,7 @@ export default function PredictionSystem() {
       </div>
 
       {/* Prediction Progress */}
-      {isPredicting && (
+      {/* {isPredicting && (
         <Card className="bg-blue-50 border-blue-200">
           <CardBody className="p-4">
             <div className="flex items-center justify-between mb-2">
@@ -93,11 +93,11 @@ export default function PredictionSystem() {
             <Progress value={predictionProgress} className="w-full" color="primary" />
           </CardBody>
         </Card>
-      )}
+      )} */}
 
       {/* Overall Status */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-r from-green-50 to-green-100">
+        {/* <Card className="bg-gradient-to-r from-green-50 to-green-100">
           <CardBody className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600 mb-1">75%</div>
             <div className="text-sm text-gray-600">Healthy Zones</div>
@@ -123,7 +123,7 @@ export default function PredictionSystem() {
             <div className="text-2xl font-bold text-blue-600 mb-1">3</div>
             <div className="text-sm text-gray-600">Active Alerts</div>
           </CardBody>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Field Zone Analysis */}
@@ -131,7 +131,7 @@ export default function PredictionSystem() {
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Field Zone Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {fieldZones.map((zone) => (
+            {/* {fieldZones.map((zone) => (
               <Card key={zone.id} className="hover:shadow-lg transition-shadow">
                 <CardBody className="p-4">
                   <div className="flex items-center justify-between mb-3">
@@ -176,7 +176,7 @@ export default function PredictionSystem() {
                   </div>
                 </CardBody>
               </Card>
-            ))}
+            ))} */}
           </div>
         </CardBody>
       </Card>
@@ -184,20 +184,20 @@ export default function PredictionSystem() {
       {/* Health Maps */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardBody className="p-6">
+          {/* <CardBody className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Health Status Map</h3>
             <div className="bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 h-48 rounded-lg flex items-center justify-center">
               <span className="text-gray-700 font-medium">NDVI Health Overlay</span>
             </div>
-          </CardBody>
+          </CardBody> */}
         </Card>
         
         <Card>
           <CardBody className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Heatmap</h3>
+            {/* <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Heatmap</h3>
             <div className="bg-gradient-to-r from-green-200 via-yellow-200 to-red-200 h-48 rounded-lg flex items-center justify-center">
               <span className="text-gray-700 font-medium">Pest/Disease Risk Heatmap</span>
-            </div>
+            </div> */}
           </CardBody>
         </Card>
       </div>
@@ -206,7 +206,7 @@ export default function PredictionSystem() {
       <Card>
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Active Alerts</h2>
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             {alerts.map((alert) => (
               <div key={alert.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center space-x-3">
@@ -227,7 +227,7 @@ export default function PredictionSystem() {
                 </Button>
               </div>
             ))}
-          </div>
+          </div> */}
         </CardBody>
       </Card>
     </div>

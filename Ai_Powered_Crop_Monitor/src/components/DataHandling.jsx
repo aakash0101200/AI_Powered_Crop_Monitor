@@ -136,7 +136,7 @@ export default function DataHandling() {
       <Card>
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Data Processing Pipeline</h2>
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="flex items-center space-x-4">
               <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                 <span className="text-green-600 font-bold">1</span>
@@ -168,8 +168,8 @@ export default function DataHandling() {
                 <p className="text-sm text-gray-600">Apply radiometric and atmospheric corrections</p>
               </div>
               <Chip color="primary" size="sm">In Progress</Chip>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </CardBody>
       </Card>
     </div>

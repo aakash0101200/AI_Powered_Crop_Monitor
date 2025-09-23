@@ -64,7 +64,7 @@ export default function FeatureExtraction() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Feature Extraction</h1>
           <p className="text-gray-600 mt-2">Compute vegetation and soil indices from spectral data</p>
@@ -76,10 +76,10 @@ export default function FeatureExtraction() {
         >
           Start Extraction
         </Button>
-      </div>
+      </div> */}
 
       {/* Extraction Progress */}
-      {extractionProgress > 0 && (
+      {/* {extractionProgress > 0 && (
         <Card className="bg-blue-50 border-blue-200">
           <CardBody className="p-4">
             <div className="flex items-center justify-between mb-2">
@@ -89,10 +89,10 @@ export default function FeatureExtraction() {
             <Progress value={extractionProgress} className="w-full" color="primary" />
           </CardBody>
         </Card>
-      )}
+      )} */}
 
       {/* Feature Tabs */}
-      <Card>
+      {/* <Card>
         <CardBody className="p-0">
           <Tabs 
             selectedKey={activeTab} 
@@ -128,10 +128,10 @@ export default function FeatureExtraction() {
             </Tab>
           </Tabs>
         </CardBody>
-      </Card>
+      </Card> */}
 
       {/* Feature Matrix Summary */}
-      <Card>
+      {/* <Card>
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Feature Matrix Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -149,10 +149,10 @@ export default function FeatureExtraction() {
             </div>
           </div>
         </CardBody>
-      </Card>
+      </Card> */}
 
       {/* Feature Visualization */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardBody className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">NDVI Distribution</h3>
@@ -170,7 +170,7 @@ export default function FeatureExtraction() {
             </div>
           </CardBody>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }

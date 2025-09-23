@@ -80,7 +80,7 @@ export default function Preprocessing() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Data Preprocessing</h1>
           <p className="text-gray-600 mt-2">Apply corrections and prepare data for analysis</p>
@@ -92,10 +92,10 @@ export default function Preprocessing() {
         >
           Start Processing
         </Button>
-      </div>
+      </div> */}
 
       {/* Processing Progress */}
-      {processingProgress > 0 && (
+      {/* {processingProgress > 0 && (
         <Card className="bg-blue-50 border-blue-200">
           <CardBody className="p-4">
             <div className="flex items-center justify-between mb-2">
@@ -105,11 +105,11 @@ export default function Preprocessing() {
             <Progress value={processingProgress} className="w-full" color="primary" />
           </CardBody>
         </Card>
-      )}
+      )} */}
 
       {/* Preprocessing Steps */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {preprocessingSteps.map((step, index) => (
+        {/* {preprocessingSteps.map((step, index) => (
           <Card key={step.id} className="hover:shadow-lg transition-shadow">
             <CardBody className="p-6">
               <div className="flex items-start justify-between mb-4">
@@ -151,12 +151,12 @@ export default function Preprocessing() {
               </div>
             </CardBody>
           </Card>
-        ))}
+        ))} */}
       </div>
 
       {/* Processing Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-r from-green-50 to-green-100">
+        {/* <Card className="bg-gradient-to-r from-green-50 to-green-100">
           <CardBody className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600">220</div>
             <div className="text-sm text-gray-600">Spectral Bands</div>
@@ -182,14 +182,14 @@ export default function Preprocessing() {
             <div className="text-2xl font-bold text-orange-600">98.5%</div>
             <div className="text-sm text-gray-600">Accuracy</div>
           </CardBody>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Before/After Comparison */}
       <Card>
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Processing Results</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Before Processing</h3>
               <div className="bg-gray-200 h-48 rounded-lg flex items-center justify-center">
@@ -202,7 +202,7 @@ export default function Preprocessing() {
                 <span className="text-green-700">Corrected & Cleaned Data</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardBody>
       </Card>
     </div>

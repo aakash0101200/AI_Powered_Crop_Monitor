@@ -140,8 +140,8 @@ export default function AIModels() {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">AI Models</h1>
-          <p className="text-gray-600 mt-2">Train and manage machine learning models for crop analysis</p>
+          {/* <h1 className="text-3xl font-bold text-gray-900">AI Models</h1>
+          <p className="text-gray-600 mt-2">Train and manage machine learning models for crop analysis</p> */}
         </div>
         <Button 
           color="primary" 
@@ -157,10 +157,10 @@ export default function AIModels() {
       {isTraining && (
         <Card className="bg-blue-50 border-blue-200">
           <CardBody className="p-4">
-            <div className="flex items-center justify-between mb-2">
+            {/* <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-blue-800">Training Model</span>
               <span className="text-sm text-blue-600">{trainingProgress}%</span>
-            </div>
+            </div> */}
             <Progress value={trainingProgress} className="w-full" color="primary" />
           </CardBody>
         </Card>
@@ -175,7 +175,7 @@ export default function AIModels() {
       <Card>
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Training History</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <h3 className="font-medium text-gray-900 mb-3">Loss Curve</h3>
               <div className="bg-gradient-to-r from-red-200 to-green-200 h-32 rounded-lg flex items-center justify-center">
@@ -188,7 +188,7 @@ export default function AIModels() {
                 <span className="text-gray-700 font-medium">Accuracy vs Epochs</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardBody>
       </Card>
 
@@ -197,7 +197,7 @@ export default function AIModels() {
         <CardBody className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Model Performance</h2>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            {/* <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-2">Model</th>
@@ -228,7 +228,7 @@ export default function AIModels() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> */}
           </div>
         </CardBody>
       </Card>
