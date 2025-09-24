@@ -71,7 +71,7 @@ const navItems = ["Home", "About", "services", "Updates", "Shares"];
 const Navbar = () => {
   return (
     // The header is positioned absolutely at the top
-    <header className="absolute top-0 left-0 right-0 z-10 p-3 sm:p-4 md:p-6">
+    <header className="absolute top-0 left-0 right-0 z-15 p-3 sm:p-4 md:p-6">
       <nav className="mx-auto flex justify-center ">
         {/* This ul creates the semi-transparent "pill" effect */}
         {/* <ul className="flex items-center space-x-8 bg-white/20 backdrop-blur-md p-4 rounded-full shadow-lg"> */}

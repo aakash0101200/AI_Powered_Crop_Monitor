@@ -12,6 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fortawesome/fontawesome-svg-core": "^7.0.1",
+    "@fortawesome/free-solid-svg-icons": "^7.0.1",
+    "@fortawesome/react-fontawesome": "^3.0.2",
     "@heroui/react": "^2.8.4",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
@@ -20,12 +23,16 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.13",
+    "apex-ui-kit": "^2.0.7",
+    "framer-motion": "^12.23.19",
+    "gsap": "^3.13.0",
     "lightningcss": "^1.30.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "tailwind-merge": "^3.3.1",
-    "tailwind-variants": "^2.1.0"
+    "tailwind-variants": "^2.1.0",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
