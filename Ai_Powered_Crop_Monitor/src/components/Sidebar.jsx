@@ -90,7 +90,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   return (
     // MODIFICATION: Changed to a fixed position to stay on screen when scrolling
     <aside 
-      className={`not-sm:hidden fixed top-0 left-0 h-screen bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out z-20 ${isCollapsed ? 'w-20' : 'w-64'}`}
+      className={`not-sm:hidden sticky top-0 left-0 h-screen bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out z-20 ${isCollapsed ? 'w-20' : 'w-64'}`}
     >
       <div className="p-4 flex items-center justify-between">
         {!isCollapsed && <h2 className="font-bold text-lg text-green-800">Agri-AI</h2>}

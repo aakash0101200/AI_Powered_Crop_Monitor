@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import './index.css';
+
+// Components
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import HeroSection from './components/HeroSection';
 import FeatureCard from './components/FeatureCard';
 import StatCard from './components/StatCard';
 import GraphCard from './components/GraphCard';
+
+// ApexUI ThemeToggle
 import ThemeToggle from '../ApexUI-Kit/ThemeToggle/ThemeToggle';
 
-// Image import for the card, not the background
+// Assets
 import tractorImage from './assets/gem1.png';
 
 function App() {
@@ -19,29 +23,30 @@ function App() {
   };
 
   return (
-    <>
-    <ThemeToggle 
-    LightTheme="light" 
-    animation={{type: 'gif', link: '/assets/ApexUI.gif'}}
-    animation='circle-left'
-    duration="1s"
-    className='absolute top-4 right-4 z-20'
-    />
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 theme-light">
+      {/* Sidebar */}
+      <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
 
-      <Sidebar
-        isCollapsed={isSidebarCollapsed}
-        toggleSidebar={toggleSidebar}
-      />
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col relative">
+        {/* Navbar */}
+        <Navbar />
 
-      <div className="flex-1  flex flex-col">
+        {/* Theme Toggle Button (top-right corner) */}
+        <ThemeToggle
+          LightTheme="theme-light"
+          DarkTheme="theme-dark"
+          animation="circle-left"
+          duration="1s"
+          className="absolute top-4 right-4 z-20"
+        />
 
 
-        {/* MODIFICATION: Removed background image styles from the <main> tag */}
+        {/* Main Content */}
         <main className="flex-1 p-0 lg:p-8 overflow-y-auto pt-20">
           <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-            <div className="lg:col-span-12 ">
+            
+            <div className="lg:col-span-12">
               <HeroSection />
             </div>
 
@@ -74,10 +79,7 @@ function App() {
           </div>
         </main>
       </div>
-        <Navbar />
-
     </div>
-    </>
   );
 }
 

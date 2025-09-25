@@ -17,3 +17,21 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* index.css */
+
+.theme-light {
+  --right-color-bg: #e5c287;
+  --color-text: #615b5b;
+  background-color: #f9f9f9;
+  color: var(--color-text);
+}
+
+/* 🌙 DARK MODE */
+.theme-dark {
+  --right-color-bg: #1f2937; /* dark gray */
+  --color-text: #e5e7eb;     /* light text */
+  background-color: #111827;
+  color: var(--color-text);
+}
+
