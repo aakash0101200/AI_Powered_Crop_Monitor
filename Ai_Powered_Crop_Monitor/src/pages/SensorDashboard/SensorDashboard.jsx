@@ -16,6 +16,9 @@ import {
 import { Line } from 'react-chartjs-2'
 import { generateInsights } from '../../insightEngine'
 
+import CropHealth from '../../components/CropHealth';
+
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,6 +42,8 @@ function SensorDashboard() {
   const [aiExplanation, setAiExplanation] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
 
+  const [cropHealth, setCropHealth] = useState(null);
+  const [cropHealthLoading, setCropHealthLoading] = useState(false);
   // Realistic variation (keep very small for stable demo)
   const addRealisticVariation = (value, sensorType) => {
     const variations = {
@@ -195,6 +200,29 @@ function SensorDashboard() {
       </div>
     )
   }
+
+  const fetchCropHealth = async (predictions) => {
+    setCropHealthLoading(true);
+    try {
+      const healthResponse = await fetch('http://localhost:8080/api/v1/crophealth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ predictions })
+      });
+      const healthData = await healthResponse.json();
+      setCropHealth(healthData);
+    } catch (error) {
+      console.error('Crop health analysis failed:', error);
+      setCropHealth({
+        healthScore: 65,
+        healthStatus: 'Moderate',
+        riskLevel: 'Medium',
+        insights: ['Health analysis temporarily unavailable']
+      });
+    } finally {
+      setCropHealthLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen p-6 mt-16">
