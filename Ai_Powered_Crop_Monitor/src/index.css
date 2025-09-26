@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap');
 @import "tailwindcss";
 
 /* Global styles */
@@ -35,3 +35,28 @@ body {
   color: var(--color-text);
 }
 
+:root {
+  --navbar-h: 64px; /* adjust (64px = 4rem) */
+}
+
+/* ensure the navbar occupies consistent height */
+.header-navbar {
+  height: var(--navbar-h);
+}
+
+/* use this helper to push content below the header */
+.pt-navbar {
+  padding-top: var(--navbar-h);
+}
+
+/* make sure sticky header is positioned for absolute children */
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* small utility to ensure content doesn't hide under header on small screens */
+@media (max-width: 768px) {
+  :root { --navbar-h: 56px; }
+}

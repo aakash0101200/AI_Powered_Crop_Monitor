@@ -1,110 +1,106 @@
+// src/components/HeroSection.jsx
+import React from "react";
 import { Button } from "@heroui/react";
-import React from 'react';
-import {IoIosArrowDown} from 'react-icons/io';
+import { IoIosArrowDown } from "react-icons/io";
+import { motion } from "framer-motion";
+import heroImg from "../assets/hero.png"; // put an optimized hero image here
 
-const HeroSection = () => {
+const KPI = ({ value, label }) => (
+  <div className="flex flex-col items-center">
+    <div className="text-3xl md:text-4xl font-extrabold">{value}</div>
+    <div className="text-sm opacity-80">{label}</div>
+  </div>
+);
+
+export default function HeroSection() {
   return (
-      
-      <div className="flex flex-col items-center justify-center h-full text-gray-800 mt-14">
-      {/* MODIFICATION: Responsive font size and updated text */}
-      <h1 className="text-4xl lg:text-5xl text-center font-bold leading-tight">
-        AI-Powered Insights for 
-        <br />
-        <span className="text-green-700">Precision Agriculture</span>
-      </h1>
+    <section
+      role="banner"
+      aria-label="Hero - AI-powered crop monitoring"
+      className="relative overflow-hidden"
+    >
+      {/* Background image + subtle overlay */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${heroImg})`,
+          // fallback color for very slow connections
+          backgroundColor: "#F6F7F3",
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          // subtle layered overlay: top shading + gentle green tint near bottom
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(63,107,42,0.06) 45%, rgba(0,0,0,0.22) 100%)",
+          backdropFilter: "blur(2px)",
+        }}
+        aria-hidden="true"
+      />
 
-      {/* MODIFICATION: Updated paragraph text */}
-      <p className="text-gray-600 mt-4 max-w-lg ">
-        Our unified platform integrates remote sensing and sensor data to provide timely, field-level insights on crop health, soil conditions, and pest risks.
-      </p>
-
-      {/* MODIFICATION: Updated button text */}
-      <button className="mt-6 bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition-all">
-        Request a Demo
-      </button>
-      
-      <IoIosArrowDown className="text-3xl mt-4 text-white animate-bounce" />
-    </div>
-  );
-}
-export default HeroSection;
-
-{/* src/components/HeroSection.jsx 
-  
-  
-
-  
-  
-      // <section className="flex items-center justify-center text-white overflow-hidden">
-      {/* <div className="absolute inset-0 bg-black/20"></div>
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-      }}></div>
-      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
-        <div className="mb-8">
-          <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-            🌈 Advanced Hyperspectral Imaging Technology
-          </span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-          Advanced Hyperspectral
-          <span className="block bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
-            Crop Monitoring
-          </span>
-        </h1>
-        <p className="text-xl md:text-2xl opacity-90 mb-8 max-w-4xl mx-auto leading-relaxed">
-          Monitor crop health, detect diseases, and optimize yields using advanced 
-          hyperspectral imaging and multispectral analysis powered by AI technology.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold mb-2">220</div>
-            <div className="text-sm opacity-80">Spectral Bands</div>
+      {/* Content container */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-28 text-center text-white">
+        <motion.div
+          initial={{ opacity: 0, translateY: 8 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div className="mb-4 inline-block bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
+            Advanced Hyperspectral & Remote Sensing
           </div>
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold mb-2">94.2%</div>
-            <div className="text-sm opacity-80">Detection Accuracy</div>
+
+          <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+            AI-powered insights for{" "}
+            <span className="block md:inline text-leaf-2">precision agriculture</span>
+          </h1>
+
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-white/90 leading-relaxed">
+            Combine satellite & drone imagery with ground sensors to monitor crop health,
+            detect disease early and make field-level recommendations that boost yield and reduce inputs.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button
+              color="primary"
+              size="lg"
+              aria-label="Request demo"
+              className="bg-white text-leaf-700 px-8 py-3 rounded-full font-semibold shadow-xl hover:scale-[1.01] transition transform"
+            >
+              Request a demo
+            </Button>
+
+            <button
+              onClick={() => {
+                document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="mt-0 sm:mt-0 inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/40 bg-white/10 hover:bg-white/20 transition text-white font-medium"
+              aria-label="View features"
+            >
+              View analysis
+            </button>
           </div>
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold mb-2">156</div>
-            <div className="text-sm opacity-80">Active Fields</div>
+
+          {/* KPIs - only show on md+ for cleaner mobile */}
+          <div className="mt-10 hidden md:flex justify-center gap-12">
+            <KPI value="220" label="Spectral bands" />
+            <KPI value="94.2%" label="Detection accuracy" />
+            <KPI value="156" label="Active fields" />
           </div>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Button 
-            color="primary" 
-            size="lg"
-            className="bg-white text-green-700 font-semibold px-10 py-4 text-lg hover:bg-green-50 transition-all duration-300 shadow-xl"
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <div className="absolute left-1/2 bottom-6 -translate-x-1/2">
+          <a
+            href="#features"
+            aria-label="Scroll to features"
+            className="inline-flex items-center justify-center w-10 h-16 rounded-full border-2 border-white/40"
           >
-            Start Monitoring
-          </Button>
-          <Button 
-            variant="bordered" 
-            size="lg"
-            className="border-2 border-white text-white hover:bg-white hover:text-green-700 px-10 py-4 text-lg transition-all duration-300 backdrop-blur-sm"
-          >
-            View Analysis
-          </Button>
-        </div>
-        <div className="flex flex-wrap justify-center items-center gap-8 text-sm opacity-75">
-          <div className="flex items-center">
-            <span className="mr-2">✅</span>
-            <span>Research Grade</span>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">🔒</span>
-            <span>Secure Data</span>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">📊</span>
-            <span>Real-Time Analysis</span>
-          </div>
+            <IoIosArrowDown className="text-xl animate-bounce text-white/90" />
+          </a>
         </div>
       </div>
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2"></div>
-        </div>
-      </div> */}
-      
-    
+    </section>
+  );
+}

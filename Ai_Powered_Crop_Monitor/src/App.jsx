@@ -1,85 +1,114 @@
-import React, { useState } from 'react';
-import './index.css';
+// src/App.jsx
+import React, { useState, lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-// Components
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import HeroSection from './components/HeroSection';
-import FeatureCard from './components/FeatureCard';
-import StatCard from './components/StatCard';
-import GraphCard from './components/GraphCard';
+import "./index.css";
 
-// ApexUI ThemeToggle
-import ThemeToggle from '../ApexUI-Kit/ThemeToggle/ThemeToggle';
+// Layout Components
+import Navbar from "./layout/Navbar";
+import Sidebar from "./layout/Sidebar";
 
-// Assets
-import tractorImage from './assets/gem1.png';
+// Pages
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+
+/**
+ * Safe lazy-load wrapper for ThemeToggle from apex UI kit (or local copy).
+ * We attempt to import the package and gracefully fall back to a no-op component
+ * if the import fails (avoids breaking the whole app during dev).
+ *
+ * Adjust the dynamic import path if you have a local copy:
+ *  - 'apex-ui-kit' OR './ApexUI-Kit/ThemeToggle/ThemeToggle'
+ */
+const LazyThemeToggle = lazy(async () => {
+  try {
+    const mod = await import("apex-ui-kit");
+    // Try to extract a named export or default. Adjust keys if your package exposes differently.
+    const Comp = mod.ThemeToggle ?? mod.default ?? mod.ThemeToggleComponent ?? null;
+    return { default: Comp ?? (() => null) };
+  } catch (err) {
+    // If apex-ui-kit isn't available at runtime (or path differs), fall back to a noop component.
+    return { default: () => null };
+  }
+});
+
+/** Minimal ErrorBoundary for lazy-loaded UI pieces */
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    // You can report this to your error logging service
+    // console.error("ErrorBoundary caught:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return null; // silent fallback for small UI pieces
+    }
+    return this.props.children;
+  }
+}
 
 function App() {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!isSidebarCollapsed);
-  };
+  const toggleSidebar = () => setSidebarCollapsed((s) => !s);
 
   return (
-    <div className="flex min-h-screen bg-gray-50 theme-light">
-      {/* Sidebar */}
-      <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+    <Router>
+      {/* Skip-link for keyboard users */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 bg-white/90 text-ui-text px-3 py-1 rounded"
+      >
+        Skip to content
+      </a>
 
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col relative">
-        {/* Navbar */}
-        <Navbar />
+      <div className="flex min-h-screen bg-ui-bg-2">
+        {/* Sidebar */}
+        <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
 
-        {/* Theme Toggle Button (top-right corner) */}
-        <ThemeToggle
-          LightTheme="theme-light"
-          DarkTheme="theme-dark"
-          animation="circle-left"
-          duration="1s"
-          className="absolute top-4 right-4 z-20"
-        />
+        {/* Main area */}
+        <div className="flex-1 flex flex-col min-h-screen relative">
+          {/* Navbar - keep it above content */}
+          <header className="sticky top-0 z-30">
+            <Navbar />
+          </header>
 
-
-        {/* Main Content */}
-        <main className="flex-1 p-0 lg:p-8 overflow-y-auto pt-20">
-          <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            <div className="lg:col-span-12">
-              <HeroSection />
-            </div>
-
-            <div className="lg:col-span-4 lg:col-start-1">
-              <FeatureCard
-                imageSrc={tractorImage}
-                title="Unified Software Platform"
-                description="Our system ingests and aligns image sequences with historical data, extracts key indices, and applies deep learning models to detect trends and predict risks."
-                buttonText="Explore Features"
-              />
-            </div>
-
-            <div className="lg:col-span-4 lg:col-start-5 flex flex-col sm:flex-row lg:flex-col gap-6">
-              <StatCard
-                title="AI-Driven Analysis"
-                metric="Real-Time"
-                description="Detect trends and predict vegetation stress or disease risk using deep learning models."
-              />
-              <StatCard
-                title="Integrated Sensor Data"
-                metric="+30% Accuracy"
-                description="Fuse soil moisture, air temperature, and humidity to contextualize spectral anomalies."
-              />
-            </div>
-
-            <div className="lg:col-span-4 lg:col-start-9">
-              <GraphCard />
-            </div>
-
+          {/* Theme Toggle - placed visually above content, inside header area */}
+          <div className="absolute top-4 right-4 z-40">
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                {/* Example props — update according to the ThemeToggle's API if needed */}
+                <LazyThemeToggle
+                  LightTheme="theme-light"
+                  DarkTheme="theme-dark"
+                  animation="circle-left"
+                  duration="1s"
+                  className="shadow-md"
+                />
+              </Suspense>
+            </ErrorBoundary>
           </div>
-        </main>
+
+          {/* Main content area. pt-20 ensures content doesn't hide behind navbar (adjust as needed) */}
+          <main id="main" className="flex-1 p-0 lg:p-8 overflow-y-auto pt-20">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+
+              {/* Redirect common legacy path or unknown pages to home or a 404 page */}
+              <Route path="/home" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
