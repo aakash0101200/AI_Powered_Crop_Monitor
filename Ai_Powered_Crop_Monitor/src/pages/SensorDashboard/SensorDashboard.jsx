@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown, Minus, Zap, Brain, Activity, AlertTriangle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import TechnicalConsole from '../../components/TechnicalConsole';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,9 +17,7 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { generateInsights } from '../../insightEngine'
-
 import CropHealth from '../../components/CropHealth';
-
 
 ChartJS.register(
   CategoryScale,
@@ -31,36 +31,61 @@ ChartJS.register(
 )
 
 function SensorDashboard() {
-  // all your previous App.jsx code stays the same
   const [predictions, setPredictions] = useState(null)
   const [loading, setLoading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState(null)
   const [autoRefresh, setAutoRefresh] = useState(true)
   const [historicalData, setHistoricalData] = useState([])
   const [selectedSensor, setSelectedSensor] = useState('Water_TDS')
-  const [insights, setInsights] = useState(null) // ADD THIS STATE
+  const [insights, setInsights] = useState(null)
   const [aiExplanation, setAiExplanation] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
+  const [cropHealth, setCropHealth] = useState(null)
+  const [cropHealthLoading, setCropHealthLoading] = useState(false)
 
-  const [cropHealth, setCropHealth] = useState(null);
-  const [cropHealthLoading, setCropHealthLoading] = useState(false);
-  // Realistic variation (keep very small for stable demo)
+  // Realistic variation function
   const addRealisticVariation = (value, sensorType) => {
     const variations = {
       'Battery_Voltage': 0.001,
-      'Env_Temp': 0.05,        // Reduced from 0.1
-      'Env_Humidity': 0.2,     // Reduced from 0.5
-      'Soil_Temp': 0.02,      // Reduced from 0.05
-      'Soil_pH': 0.01,        // Reduced from 0.02
-      'Water_TDS': 0.5,       // Reduced from 1.0
-      'Light_Intensity': 1.0,  // Reduced from 2.0
-      'Leaf_Wetness': 0.1     // Reduced from 0.2
+      'Env_Temp': 0.05,
+      'Env_Humidity': 0.2,
+      'Soil_Temp': 0.02,
+      'Soil_pH': 0.01,
+      'Water_TDS': 0.5,
+      'Light_Intensity': 1.0,
+      'Leaf_Wetness': 0.1
     }
     
     const maxChange = variations[sensorType] || 0.01
     const change = (Math.random() - 0.5) * maxChange
     return Math.max(0, value + change)
   }
+
+  // Fetch crop health analysis
+  const fetchCropHealth = async (predictions) => {
+    setCropHealthLoading(true)
+    try {
+      const healthResponse = await fetch('http://localhost:8080/api/v1/crophealth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ predictions })
+      })
+      const healthData = await healthResponse.json()
+      setCropHealth(healthData)
+    } catch (error) {
+      console.error('Crop health analysis failed:', error)
+      setCropHealth({
+        healthScore: 65,
+        healthStatus: 'Moderate',
+        riskLevel: 'Medium',
+        modelAccuracy: 99.4,
+        insights: ['Health analysis temporarily unavailable']
+      })
+    } finally {
+      setCropHealthLoading(false)
+    }
+  }
+  
 
   const fetchPredictions = async () => {
     setLoading(true)
@@ -77,6 +102,7 @@ function SensorDashboard() {
             
       setPredictions(realisticPredictions)
       
+      // Fetch AI explanation
       setAiLoading(true)
       try {
         const explainResponse = await fetch('http://localhost:8080/api/v1/explain', {
@@ -93,8 +119,10 @@ function SensorDashboard() {
         setAiLoading(false)
       }
 
+      // Fetch crop health analysis
+      await fetchCropHealth(realisticPredictions)
 
-      // GENERATE INSIGHTS RIGHT AFTER SETTING PREDICTIONS
+      // Generate insights
       const newInsights = generateInsights(realisticPredictions)
       setInsights(newInsights)
       
@@ -110,7 +138,7 @@ function SensorDashboard() {
         ...realisticPredictions
       }
       
-      setHistoricalData(prev => [...prev.slice(-39), newPoint]) // Keep last 40 points
+      setHistoricalData(prev => [...prev.slice(-39), newPoint])
       
     } catch (error) {
       console.error('Failed to fetch predictions:', error)
@@ -121,7 +149,7 @@ function SensorDashboard() {
   useEffect(() => {
     fetchPredictions()
     if (autoRefresh) {
-      const interval = setInterval(fetchPredictions, 30000) // Changed to 30 seconds
+      const interval = setInterval(fetchPredictions, 30000)
       return () => clearInterval(interval)
     }
   }, [autoRefresh])
@@ -147,7 +175,6 @@ function SensorDashboard() {
     return <Minus className="w-4 h-4 text-gray-500" />
   }
 
-  // Chart configuration (unchanged)
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -201,34 +228,11 @@ function SensorDashboard() {
     )
   }
 
-  const fetchCropHealth = async (predictions) => {
-    setCropHealthLoading(true);
-    try {
-      const healthResponse = await fetch('http://localhost:8080/api/v1/crophealth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ predictions })
-      });
-      const healthData = await healthResponse.json();
-      setCropHealth(healthData);
-    } catch (error) {
-      console.error('Crop health analysis failed:', error);
-      setCropHealth({
-        healthScore: 65,
-        healthStatus: 'Moderate',
-        riskLevel: 'Medium',
-        insights: ['Health analysis temporarily unavailable']
-      });
-    } finally {
-      setCropHealthLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen p-6 mt-16">
       <div className="max-w-7xl mx-auto">
         
-        {/* Header - UNCHANGED */}
+        {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -277,47 +281,75 @@ function SensorDashboard() {
           </div>
         </motion.div>
 
-{/* AI Agricultural Assistant with bullet points */}
-<div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-          <Brain className="w-6 h-6 text-green-600" />
-          🤖 AI Agricultural Assistant
-          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full ml-2">
-            Powered by Phi-3 Mini
-          </span>
-        </h2>
-        
-        {aiLoading ? (
-          <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500"></div>
-              <span className="text-gray-600 italic">🧠 AI analyzing sensor patterns...</span>
+        {/* AI Agricultural Assistant */}
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl shadow-lg p-6 mb-8">
+          <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
+            <Brain className="w-6 h-6 text-green-600" />
+            🤖 AI Agricultural Assistant
+            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full ml-2">
+              Powered by Phi-3 Mini
+            </span>
+          </h2>
+          
+          {aiLoading ? (
+            <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500"></div>
+                <span className="text-gray-600 italic">🧠 AI analyzing sensor patterns...</span>
+              </div>
+            </div>
+          ) : aiExplanation ? (
+            <div className="bg-white rounded-lg p-4 border-l-4 border-green-500 prose max-w-none">
+              {aiExplanation.split('\n').map((line, idx) => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('-') || trimmed.startsWith('•')) {
+                  return <li key={idx} className="mb-1">{trimmed.replace(/^[-•]\s*/, '')}</li>;
+                }
+                if (trimmed === '') {
+                  return <br key={idx} />;
+                }
+                return <p key={idx}>{trimmed}</p>;
+              })}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg p-4 border-l-4 border-gray-300">
+              <span className="text-gray-500 italic">🔄 Waiting for sensor data...</span>
+            </div>
+          )}
+        </div>
+
+          {/* True-Color & NDVI Comparison */}
+          <div className="flex gap-4 mb-8">
+            {/* True-Color Field View */}
+            <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
+              <h3 className="font-bold mb-2">True-Color Field View</h3>
+              <img
+                src="/true_color_map.png"
+                alt="True Color Field"
+                className="rounded-lg w-full"
+              />
+            </div>
+
+            {/* NDVI False-Color Map */}
+            <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
+              <h3 className="font-bold mb-2">NDVI False-Color Map</h3>
+              <img
+                src="/ndvi_map.png"
+                alt="NDVI Map"
+                className="rounded-lg w-full"
+              />
+              <div className="text-xs text-gray-500 mt-1">
+                Red = Stressed, Green = Healthy
+              </div>
             </div>
           </div>
-        ) : aiExplanation ? (
-          // Render bullet points from aiExplanation string (assumed to be new line separated)
-          <div className="bg-white rounded-lg p-4 border-l-4 border-green-500 prose max-w-none">
-            {aiExplanation.split('\n').map((line, idx) => {
-              const trimmed = line.trim();
-              if (trimmed.startsWith('-') || trimmed.startsWith('•')) {
-                // Render as a bullet list item
-                return <li key={idx} className="mb-1">{trimmed.replace(/^[-•]\s*/, '')}</li>;
-              }
-              if (trimmed === '') {
-                return <br key={idx} />;
-              }
-              return <p key={idx}>{trimmed}</p>;
-            })}
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg p-4 border-l-4 border-gray-300">
-            <span className="text-gray-500 italic">🔄 Waiting for sensor data...</span>
-          </div>
-        )}
-      </div>
 
+        {/* Crop Health Analysis Component */}
+        <CropHealth cropHealth={cropHealth} loading={cropHealthLoading} />
+          {/* Technical Console */}
+        <TechnicalConsole predictions={predictions} cropHealth={cropHealth} />
 
-        {/* NEW: AI INSIGHTS SECTION - INSERT HERE */}
+        {/* AI Insights Section */}
         {insights && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-xl shadow-lg p-6 lg:col-span-2">
@@ -378,7 +410,7 @@ function SensorDashboard() {
           </div>
         )}
 
-        {/* NEW: RECOMMENDATIONS SECTION - INSERT HERE */}
+        {/* Recommendations Section */}
         {insights && insights.recs.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
@@ -408,7 +440,7 @@ function SensorDashboard() {
           </div>
         )}
 
-        {/* Sensor Cards Grid - UNCHANGED */}
+        {/* Sensor Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <AnimatePresence>
             {Object.entries(predictions).map(([sensor, value], index) => {
@@ -463,7 +495,7 @@ function SensorDashboard() {
           </AnimatePresence>
         </div>
 
-        {/* Chart and Stats - UNCHANGED */}
+        {/* Chart and Stats */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Live Chart */}
