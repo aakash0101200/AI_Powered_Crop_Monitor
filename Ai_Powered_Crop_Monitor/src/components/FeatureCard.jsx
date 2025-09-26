@@ -2,17 +2,6 @@ import React from "react";
 import { Card, CardBody } from "@heroui/react";
 import { Button } from "@heroui/react";
 
-/**
- * FeatureCard
- * Props:
- *  - imageSrc: string (optional)
- *  - title: string (required)
- *  - description: string (optional)
- *  - ctaText: string (default: "Learn more")
- *  - href: string (optional)  -> if provided, CTA is a link
- *  - onClick: func (optional) -> if provided, CTA is a button
- *  - Icon: React component (optional) -> small decorative icon
- */
 const FeatureCard = ({
   imageSrc,
   title,
@@ -25,13 +14,16 @@ const FeatureCard = ({
   const ariaId = `feature-${title.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
+    
     <Card
-      className="h-full flex flex-col justify-between p-0 overflow-hidden rounded-2xl
-                 bg-ui-bg shadow-sm border border-ui-border transition-shadow hover:shadow-lg"
-      role="article"
-      aria-labelledby={ariaId}
-    >
-      {/* Image (optional) */}
+        className="flex flex-col justify-between p-0 overflow-hidden rounded-2xl
+             bg-ui-bg shadow-sm border border-ui-border transition-shadow hover:shadow-lg
+             h-full"  // added h-full to match parent grid height
+        role="article"
+        aria-labelledby={ariaId}
+      >
+
+      {/* Image */}
       {imageSrc && (
         <div className="w-full h-40 md:h-44 overflow-hidden">
           <img
@@ -48,7 +40,7 @@ const FeatureCard = ({
           {Icon && (
             <div
               className="flex items-center justify-center w-12 h-12 rounded-lg
-                         bg-gradient-to-br from-leaf-3/30 to-leaf-2/20 border border-white/40 shrink-0"
+                         bg-gradient-to-br from-leaf-3/30 to-leaf-2/20 border border-white/30 shrink-0"
               aria-hidden="true"
             >
               <Icon className="w-5 h-5 text-leaf-2" />
@@ -56,11 +48,14 @@ const FeatureCard = ({
           )}
 
           <div className="min-w-0">
-            <h3 id={ariaId} className="text-base font-semibold text-ui-text">
+            <h3
+              id={ariaId}
+              className="text-base font-semibold text-ui-text dark:text-ui-text-dark"
+            >
               {title}
             </h3>
             {description && (
-              <p className="mt-2 text-sm text-ui-muted/90 leading-relaxed">
+              <p className="mt-2 text-sm text-ui-muted/90 dark:text-ui-muted-dark leading-relaxed">
                 {description}
               </p>
             )}
@@ -68,7 +63,7 @@ const FeatureCard = ({
         </div>
       </CardBody>
 
-      {/* CTA area */}
+      {/* CTA */}
       <div className="p-4 pt-0">
         {onClick ? (
           <Button
@@ -82,7 +77,8 @@ const FeatureCard = ({
           <a
             href={href}
             className="inline-flex items-center justify-center w-full rounded-2xl px-4 py-3
-                       bg-white/6 border border-ui-border text-leaf-2 font-semibold hover:bg-ui-bg-3 transition"
+                       bg-white/10 border border-ui-border text-leaf-2 font-semibold hover:bg-ui-bg transition
+                       dark:bg-ui-bg-dark dark:border-ui-border-dark dark:text-leaf-2/90 dark:hover:bg-ui-bg-2"
             aria-label={`${ctaText} - ${title}`}
           >
             {ctaText} →
@@ -91,7 +87,8 @@ const FeatureCard = ({
           <button
             type="button"
             disabled
-            className="w-full rounded-2xl px-4 py-3 bg-ui-bg text-ui-muted border border-ui-border cursor-not-allowed"
+            className="w-full rounded-2xl px-4 py-3 bg-ui-bg text-ui-muted border border-ui-border cursor-not-allowed
+                       dark:bg-ui-bg-dark dark:text-ui-muted-dark dark:border-ui-border-dark"
             aria-disabled="true"
           >
             {ctaText}

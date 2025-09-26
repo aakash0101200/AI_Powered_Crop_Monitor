@@ -8,61 +8,94 @@
 
 body {
   margin: 0;
-  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  background-color: var(--right-color-bg);
-  color: var(--color-text);
-  transition: background 0.3s, color 0.3s;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* index.css */
-
+/* 🌞 LIGHT THEME */
 .theme-light {
-  --right-color-bg: #eeddbf;
-  --color-text: #615b5b;
-  --color-hover: #d4b16a;
-  background-color: #f9f9f9;
-  color: var(--color-text);
+  --bg-color: #fefcf7;          /* very light cream */
+  --text-color: #333333;        /* dark gray for readability */
+  --primary-color: #2a7f62;     /* deep green accent */
+  --hover-color: #dce6df;       /* subtle light green on hover */
+  --sidebar-bg: #ffffff;        /* clean white sidebar */
+  --card-bg: #ffffff;           /* card background */
 }
 
-/* 🌙 DARK MODE */
+/* 🌙 DARK THEME */
 .theme-dark {
-  --right-color-bg: #121c2b; /* dark gray */
-  --color-text: #e5e7eb;     /* light text */
-  --color-hover: #374151;   /* slightly lighter gray for hover */
-  background-color: #111827;
-  color: var(--color-text);
+  --bg-color: #111827;          /* deep navy */
+  --text-color: #e5e7eb;        /* soft light text */
+  --primary-color: #4ade80;     /* bright green accent */
+  --hover-color: #1f2937;       /* slightly lighter dark for hover */
+  --sidebar-bg: #1e293b;        /* sidebar background */
+  --card-bg: #1f2937;           /* card background */
 }
 
+/* Navbar & header */
 :root {
-  --navbar-h: 64px; /* adjust (64px = 4rem) */
+  --navbar-h: 64px; /* default header height */
 }
 
-/* ensure the navbar occupies consistent height */
 .header-navbar {
   height: var(--navbar-h);
+  background-color: var(--sidebar-bg);
 }
 
-/* use this helper to push content below the header */
 .pt-navbar {
   padding-top: var(--navbar-h);
 }
 
-/* make sure sticky header is positioned for absolute children */
 .header-sticky {
   position: sticky;
   top: 0;
   z-index: 40;
 }
 
-/* small utility to ensure content doesn't hide under header on small screens */
+/* Small screen adjustments */
 @media (max-width: 768px) {
   :root { --navbar-h: 56px; }
+}
+
+/* Links & hover */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--hover-color);
+}
+
+/* Buttons */
+button {
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Sidebar text/icon hover */
+.sidebar-item:hover {
+  background-color: var(--hover-color);
 }

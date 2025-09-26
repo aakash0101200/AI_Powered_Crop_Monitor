@@ -8,12 +8,15 @@ import tractorImage from "../assets/gem1.png";
 
 function Home() {
   return (
-    <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div className="container mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+
+      {/* Hero section already in top */}
       <div className="lg:col-span-12">
         <HeroSection />
       </div>
 
-      <div className="lg:col-span-4 lg:col-start-1">
+      {/* Feature Card - takes 4/12 columns */}
+      <div className="lg:col-span-4">
         <FeatureCard
           imageSrc={tractorImage}
           title="Unified Software Platform"
@@ -22,8 +25,9 @@ function Home() {
         />
       </div>
 
-      <div className="lg:col-span-4 lg:col-start-5 flex flex-col sm:flex-row lg:flex-col gap-6">
-        <StatCard
+      {/* Stat Cards - 4/12 columns, stacked vertically on small screens */}
+      <div className="lg:col-span-4 flex flex-col gap-6">
+        {/* <StatCard
           title="AI-Driven Analysis"
           metric="Real-Time"
           description="Detect trends and predict vegetation stress or disease risk using deep learning models."
@@ -32,12 +36,13 @@ function Home() {
           title="Integrated Sensor Data"
           metric="+30% Accuracy"
           description="Fuse soil moisture, air temperature, and humidity to contextualize spectral anomalies."
-        />
+        /> */}
       </div>
 
-      <div className="lg:col-span-4 lg:col-start-9">
+      {/* Graph Card - 4/12 columns
+      <div className="lg:col-span-4">
         <GraphCard />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -2,12 +2,11 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
-  { name: "Home", path: "/" },   // merged Home + Dashboard
+  { name: "Home", path: "/" },
   { name: "Features", path: "/features" },
   { name: "Reports", path: "/reports" },
   { name: "Alerts", path: "/alerts" },
 ];
-
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,7 +18,7 @@ const Navbar = () => {
           className="
             flex items-stretch
             sm:space-x-6 md:space-x-8 lg:space-x-10
-            bg-white/20 backdrop-blur-md
+            bg-[var(--sidebar-bg)] backdrop-blur-md
             px-3 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4
             rounded-3xl shadow-lg
             text-xs sm:text-sm md:text-base lg:text-lg
@@ -31,8 +30,8 @@ const Navbar = () => {
                 to={item.path}
                 className={`px-2 transition-colors ${
                   location.pathname === item.path
-                    ? "font-bold text-green-800"
-                    : "text-gray-800 hover:text-green-700"
+                    ? "font-bold text-[var(--primary-color)]"
+                    : "text-[var(--text-color)] hover:text-[var(--primary-color)]"
                 }`}
               >
                 {item.name}
