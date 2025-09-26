@@ -12,6 +12,10 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--right-color-bg);
+  color: var(--color-text);
+  transition: background 0.3s, color 0.3s;
 }
 
 #root {
@@ -21,16 +25,18 @@ body {
 /* index.css */
 
 .theme-light {
-  --right-color-bg: #e5c287;
+  --right-color-bg: #eeddbf;
   --color-text: #615b5b;
+  --color-hover: #d4b16a;
   background-color: #f9f9f9;
   color: var(--color-text);
 }
 
 /* 🌙 DARK MODE */
 .theme-dark {
-  --right-color-bg: #1f2937; /* dark gray */
+  --right-color-bg: #121c2b; /* dark gray */
   --color-text: #e5e7eb;     /* light text */
+  --color-hover: #374151;   /* slightly lighter gray for hover */
   background-color: #111827;
   color: var(--color-text);
 }
