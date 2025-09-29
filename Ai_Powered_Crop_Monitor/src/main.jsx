@@ -7,6 +7,15 @@ import "./index.css";
 
 const rootElement = document.getElementById("root");
 
+// Set preferred dark theme by default
+if (typeof document !== "undefined") {
+  const root = document.body;
+  if (root && !root.classList.contains("theme-dark")) {
+    root.classList.remove("theme-light");
+    root.classList.add("theme-dark");
+  }
+}
+
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <HeroUIProvider>

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@heroui/react";
 import { IoIosArrowDown } from "react-icons/io";
 import { motion } from "framer-motion";
-import heroImg from "../assets/hero.png"; // optimized hero image
+import HeroSlider from "./HeroSlider";
 
 // KPI component
 const KPI = ({ value, label }) => (
@@ -19,21 +19,8 @@ export default function HeroSection() {
       aria-label="Hero - AI-powered crop monitoring"
       className="relative overflow-hidden"
     >
-      {/* Background Image + Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImg})`, backgroundColor: "#F6F7F3" }}
-        aria-hidden="true"
-      />
-
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(63,107,42,0.06) 45%, rgba(0,0,0,0.2) 100%)",
-          backdropFilter: "blur(2px)",
-        }}
-        aria-hidden="true"
-      />
+      {/* Background Slider */}
+      <HeroSlider />
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-28 text-center">

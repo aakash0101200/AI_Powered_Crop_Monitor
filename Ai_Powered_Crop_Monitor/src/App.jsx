@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import SensorDashboard from './pages/SensorDashboard/SensorDashboard'
@@ -10,17 +10,15 @@ import Sidebar from "./layout/Sidebar";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import HeroSection from './components/HeroSection'
+import Farmers from "./pages/Farmers";
+import Agronomists from "./pages/Agronomists";
+import FieldTechnicians from "./pages/FieldTechnicians";
 
 import { Layout, Menu, Typography } from 'antd';
 import { DashboardOutlined, UploadOutlined, HistoryOutlined } from '@ant-design/icons';
 import CropDashboard from './components/CropDashboard';
+import RoleSwitcher from "./components/RoleSwitcher";
 
-// Lazy load ThemeToggle
-const ThemeToggle = lazy(() =>
-  import("../ApexUI-Kit/ThemeToggle/ThemeToggle").catch(() => ({
-    default: () => null,
-  }))
-);
 
 function App() {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -37,15 +35,8 @@ function App() {
           {/* Navbar */}
           <Navbar />
 
-          {/* Theme Toggle */}
-          <Suspense fallback={null}>
-            <ThemeToggle
-              LightTheme="light"
-              animation="circle-right"
-              duration="1s"
-              className="absolute top-4 right-4 z-20"
-            />
-          </Suspense>
+          {/* Role Switcher (top-right corner) */}
+          <RoleSwitcher className="fixed top-4 right-4 z-50" />
 
           {/* Pages */}
           <main className="flex-1 overflow-y-auto pt-20 p-6 lg:p-8">
@@ -53,6 +44,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/crop-dashboard" element={<CropDashboard />} />
+              <Route path="/farmers" element={<Farmers />} />
+              <Route path="/agronomists" element={<Agronomists />} />
+              <Route path="/field-technicians" element={<FieldTechnicians />} />
 
               
               {/* Fallback / redirects */}
