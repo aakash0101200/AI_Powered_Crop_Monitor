@@ -14,7 +14,6 @@ import HeroSection from './components/HeroSection'
 import { Layout, Menu, Typography } from 'antd';
 import { DashboardOutlined, UploadOutlined, HistoryOutlined } from '@ant-design/icons';
 import CropDashboard from './components/CropDashboard';
-import HyperspectralUpload from './components/HyperspectralUpload';
 
 // Lazy load ThemeToggle
 const ThemeToggle = lazy(() =>
@@ -54,7 +53,6 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/crop-dashboard" element={<CropDashboard />} />
-              <Route path="/upload" element={<HyperspectralUpload />} />
 
               
               {/* Fallback / redirects */}
