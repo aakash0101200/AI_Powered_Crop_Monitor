@@ -59,8 +59,7 @@ function App() {
               <Route path="/home" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />
               <Route path="/" element={<HeroSection />} />
-              <Route path="/sensor-dashboard" element={<SensorDashboard />} />
-              
+              <Route path="/sensor-dashboard" element={<SensorDashboard />} />              
             </Routes>
           </main>
         </div>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown, Minus, Zap, Brain, Activity, AlertTriangle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import TechnicalConsole from '../../components/TechnicalConsole';
+import TechnicalConsole from '../../components/TechnicalConsole'
 
 import {
   Chart as ChartJS,
@@ -17,7 +17,7 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { generateInsights } from '../../insightEngine'
-import CropHealth from '../../components/CropHealth';
+import CropHealth from '../../components/CropHealth'
 
 ChartJS.register(
   CategoryScale,
@@ -31,7 +31,7 @@ ChartJS.register(
 )
 
 function SensorDashboard() {
-  const [predictions, setPredictions] = useState(null)
+  const [sensorReadings, setSensorReadings] = useState(null)
   const [loading, setLoading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState(null)
   const [autoRefresh, setAutoRefresh] = useState(true)
@@ -43,133 +43,111 @@ function SensorDashboard() {
   const [cropHealth, setCropHealth] = useState(null)
   const [cropHealthLoading, setCropHealthLoading] = useState(false)
 
-  // Realistic variation function
-  const addRealisticVariation = (value, sensorType) => {
-    const variations = {
-      'Battery_Voltage': 0.001,
-      'Env_Temp': 0.05,
-      'Env_Humidity': 0.2,
-      'Soil_Temp': 0.02,
-      'Soil_pH': 0.01,
-      'Water_TDS': 0.5,
-      'Light_Intensity': 1.0,
-      'Leaf_Wetness': 0.1
-    }
-    
-    const maxChange = variations[sensorType] || 0.01
-    const change = (Math.random() - 0.5) * maxChange
-    return Math.max(0, value + change)
-  }
-
-  // Fetch crop health analysis
-  const fetchCropHealth = async (predictions) => {
-    setCropHealthLoading(true)
-    try {
-      const healthResponse = await fetch('http://localhost:8080/api/v1/crophealth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ predictions })
-      })
-      const healthData = await healthResponse.json()
-      setCropHealth(healthData)
-    } catch (error) {
-      console.error('Crop health analysis failed:', error)
-      setCropHealth({
-        healthScore: 65,
-        healthStatus: 'Moderate',
-        riskLevel: 'Medium',
-        modelAccuracy: 99.4,
-        insights: ['Health analysis temporarily unavailable']
-      })
-    } finally {
-      setCropHealthLoading(false)
-    }
-  }
-  
-
-  const fetchPredictions = async () => {
+  // Fetch latest sensor readings
+  const fetchSensorReadings = async () => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:8080/api/v1/predict')
-      const data = await response.json()
-      
-      const realisticPredictions = {}
-      Object.keys(data.predictions).forEach(key => {
-        realisticPredictions[key] = parseFloat(
-          addRealisticVariation(data.predictions[key], key).toFixed(3)
-        )
-      })
-            
-      setPredictions(realisticPredictions)
-      
+      const res = await fetch('http://localhost:8080/api/v1/sensor-readings/latest')
+      if (!res.ok) throw new Error('Failed to fetch sensor readings')
+      const data = await res.json()
+
+      const readings = {
+        Battery_Voltage: data.readings.batteryVoltage,
+        Env_Temp: data.readings.envTemp,
+        Env_Humidity: data.readings.envHumidity,
+        Leaf_Wetness: data.readings.leafWetness,
+        Light_Intensity: data.readings.lightIntensity,
+        Soil_Temp: data.readings.soilTemp,
+        Soil_pH: data.readings.soilPH,
+        Water_TDS: data.readings.waterTDS,
+      }
+
+      setSensorReadings(readings)
+
+      const newPoint = { time: new Date().toLocaleTimeString(), ...readings }
+      setHistoricalData(prev => [...prev.slice(-39), newPoint])
+
+      setLastUpdated(new Date().toLocaleTimeString())
+
       // Fetch AI explanation
       setAiLoading(true)
       try {
         const explainResponse = await fetch('http://localhost:8080/api/v1/explain', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ predictions: realisticPredictions })
+          body: JSON.stringify({ predictions: readings }),
         })
         const explainData = await explainResponse.json()
         setAiExplanation(explainData.explanation)
-      } catch (error) {
-        console.error('AI explanation failed:', error)
-        setAiExplanation("Agricultural analysis system is processing sensor data. Current readings indicate normal operational parameters.")
+      } catch (err) {
+        console.error('AI explanation failed:', err)
+        setAiExplanation(
+          "Agricultural analysis system is processing sensor data. Current readings indicate normal operational parameters."
+        )
       } finally {
         setAiLoading(false)
       }
 
       // Fetch crop health analysis
-      await fetchCropHealth(realisticPredictions)
+      await fetchCropHealth()
 
       // Generate insights
-      const newInsights = generateInsights(realisticPredictions)
+      const newInsights = generateInsights(readings)
       setInsights(newInsights)
-      
-      setLastUpdated(new Date().toLocaleTimeString())
-      
-      const newPoint = {
-        time: new Date().toLocaleTimeString('en-US', { 
-          hour12: false, 
-          hour: '2-digit', 
-          minute: '2-digit',
-          second: '2-digit'
-        }),
-        ...realisticPredictions
-      }
-      
-      setHistoricalData(prev => [...prev.slice(-39), newPoint])
-      
     } catch (error) {
-      console.error('Failed to fetch predictions:', error)
+      console.error('Failed to fetch sensor readings:', error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
+  }
+
+  // Fetch crop health analysis
+  const fetchCropHealth = async () => {
+    setCropHealthLoading(true)
+    try {
+      const res = await fetch('http://localhost:8080/api/v1/crophealth')
+      if (!res.ok) throw new Error('Failed to fetch crop health')
+      const data = await res.json()
+      setCropHealth(data)
+    } catch (error) {
+      console.error('Crop health fetch failed:', error)
+      setCropHealth({
+        healthScore: 65,
+        healthStatus: 'Moderate',
+        riskLevel: 'Medium',
+        modelAccuracy: 99.4,
+        insights: ['Health analysis temporarily unavailable'],
+      })
+    } finally {
+      setCropHealthLoading(false)
+    }
   }
 
   useEffect(() => {
-    fetchPredictions()
+    fetchSensorReadings()
     if (autoRefresh) {
-      const interval = setInterval(fetchPredictions, 30000)
-      return () => clearInterval(interval)
+      const id = setInterval(fetchSensorReadings, 30000)
+      return () => clearInterval(id)
     }
   }, [autoRefresh])
+  
 
   const sensorConfig = {
-    Battery_Voltage: { unit: 'V', threshold: 3.6, color: '#f59e0b', bgColor: 'bg-yellow-500', icon: '🔋' },
-    Env_Humidity: { unit: '%', threshold: 70, color: '#3b82f6', bgColor: 'bg-blue-500', icon: '💧' },
-    Env_Temp: { unit: '°C', threshold: 30, color: '#ef4444', bgColor: 'bg-red-500', icon: '🌡️' },
-    Leaf_Wetness: { unit: '%', threshold: 80, color: '#10b981', bgColor: 'bg-green-500', icon: '🍃' },
-    Light_Intensity: { unit: 'lux', threshold: 50, color: '#f97316', bgColor: 'bg-orange-500', icon: '☀️' },
-    Soil_Temp: { unit: '°C', threshold: 25, color: '#d97706', bgColor: 'bg-amber-600', icon: '🌍' },
-    Soil_pH: { unit: 'pH', threshold: 7, color: '#8b5cf6', bgColor: 'bg-purple-500', icon: '⚗️' },
-    Water_TDS: { unit: 'mg/L', threshold: 120, color: '#06b6d4', bgColor: 'bg-cyan-500', icon: '🌊' }
+    Battery_Voltage: { unit: 'V', threshold: 3.6, color: '#f59e0b', icon: '🔋' },
+    Env_Humidity: { unit: '%', threshold: 70, color: '#3b82f6', icon: '💧' },
+    Env_Temp: { unit: '°C', threshold: 30, color: '#ef4444', icon: '🌡️' },
+    Leaf_Wetness: { unit: '%', threshold: 80, color: '#10b981', icon: '🍃' },
+    Light_Intensity: { unit: 'lux', threshold: 50, color: '#f97316', icon: '☀️' },
+    Soil_Temp: { unit: '°C', threshold: 25, color: '#d97706', icon: '🌍' },
+    Soil_pH: { unit: 'pH', threshold: 7, color: '#8b5cf6', icon: '⚗️' },
+    Water_TDS: { unit: 'mg/L', threshold: 120, color: '#06b6d4', icon: '🌊' },
   }
 
-  const getTrendIcon = (sensor) => {
+  const getTrendIcon = sensor => {
     if (historicalData.length < 2) return <Minus className="w-4 h-4 text-gray-500" />
-    const current = predictions?.[sensor] || 0
+    const current = sensorReadings?.[sensor] || 0
     const previous = historicalData[historicalData.length - 2]?.[sensor] || 0
-    
+
     if (current > previous) return <TrendingUp className="w-4 h-4 text-green-500" />
     if (current < previous) return <TrendingDown className="w-4 h-4 text-red-500" />
     return <Minus className="w-4 h-4 text-gray-500" />
@@ -212,10 +190,10 @@ function SensorDashboard() {
     ],
   }
 
-  if (!predictions) {
+  if (!sensorReadings) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center bg-white rounded-2xl shadow-xl p-8"
@@ -270,12 +248,12 @@ function SensorDashboard() {
               </button>
               
               <button
-                onClick={fetchPredictions}
+                onClick={fetchSensorReadings}
                 disabled={loading}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center gap-2 shadow-lg"
               >
                 <Zap className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                {loading ? 'Predicting...' : 'Refresh'}
+                {loading ? 'Loading...' : 'Refresh'}
               </button>
             </div>
           </div>
@@ -318,36 +296,34 @@ function SensorDashboard() {
           )}
         </div>
 
-          {/* True-Color & NDVI Comparison */}
-          <div className="flex gap-4 mb-8">
-            {/* True-Color Field View */}
-            <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
-              <h3 className="font-bold mb-2">True-Color Field View</h3>
-              <img
-                src="/true_color_map.png"
-                alt="True Color Field"
-                className="rounded-lg w-full"
-              />
-            </div>
-
-            {/* NDVI False-Color Map */}
-            <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
-              <h3 className="font-bold mb-2">NDVI False-Color Map</h3>
-              <img
-                src="/ndvi_map.png"
-                alt="NDVI Map"
-                className="rounded-lg w-full"
-              />
-              <div className="text-xs text-gray-500 mt-1">
-                Red = Stressed, Green = Healthy
-              </div>
+        {/* True-Color & NDVI Comparison */}
+        <div className="flex gap-4 mb-8">
+          <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
+            <h3 className="font-bold mb-2">True-Color Field View</h3>
+            <img
+              src="/true_color_map.png"
+              alt="True Color Field"
+              className="rounded-lg w-full"
+            />
+          </div>
+          <div className="flex-1 bg-white rounded-xl shadow-lg p-4">
+            <h3 className="font-bold mb-2">NDVI False-Color Map</h3>
+            <img
+              src="/ndvi_map.png"
+              alt="NDVI Map"
+              className="rounded-lg w-full"
+            />
+            <div className="text-xs text-gray-500 mt-1">
+              Red = Stressed, Green = Healthy
             </div>
           </div>
+        </div>
 
         {/* Crop Health Analysis Component */}
         <CropHealth cropHealth={cropHealth} loading={cropHealthLoading} />
-          {/* Technical Console */}
-        <TechnicalConsole predictions={predictions} cropHealth={cropHealth} />
+        
+        {/* Technical Console */}
+        <TechnicalConsole sensorReadings={sensorReadings} cropHealth={cropHealth} />
 
         {/* AI Insights Section */}
         {insights && (
@@ -358,7 +334,7 @@ function SensorDashboard() {
                 AI Agricultural Analysis
               </h2>
               <p className="text-gray-800 mb-4 font-medium">{insights.overview}</p>
-              {insights.summary.length > 0 && (
+              {insights.summary?.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Current Conditions:</h3>
                   <ul className="list-disc pl-5 text-gray-700 space-y-1">
@@ -375,34 +351,32 @@ function SensorDashboard() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Disease Risk</span>
-                  <div className="flex items-center gap-2">
-                    <div className={`px-2 py-1 rounded text-xs font-medium ${
-                      insights.risks.disease >= 70 ? 'bg-red-100 text-red-800' :
-                      insights.risks.disease >= 40 ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {insights.risks.disease}%
-                    </div>
+                  <div className={`px-2 py-1 rounded text-xs font-medium ${
+                    insights.risks?.disease >= 70 ? 'bg-red-100 text-red-800' :
+                    insights.risks?.disease >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-green-100 text-green-800'
+                  }`}>
+                    {insights.risks?.disease || 0}%
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Salinity Risk</span>
                   <div className={`px-2 py-1 rounded text-xs font-medium ${
-                    insights.risks.salinity >= 70 ? 'bg-red-100 text-red-800' :
-                    insights.risks.salinity >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                    insights.risks?.salinity >= 70 ? 'bg-red-100 text-red-800' :
+                    insights.risks?.salinity >= 40 ? 'bg-yellow-100 text-yellow-800' :
                     'bg-green-100 text-green-800'
                   }`}>
-                    {insights.risks.salinity}%
+                    {insights.risks?.salinity || 0}%
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Heat Stress</span>
                   <div className={`px-2 py-1 rounded text-xs font-medium ${
-                    insights.risks.heat >= 70 ? 'bg-red-100 text-red-800' :
-                    insights.risks.heat >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                    insights.risks?.heat >= 70 ? 'bg-red-100 text-red-800' :
+                    insights.risks?.heat >= 40 ? 'bg-yellow-100 text-yellow-800' :
                     'bg-green-100 text-green-800'
                   }`}>
-                    {insights.risks.heat}%
+                    {insights.risks?.heat || 0}%
                   </div>
                 </div>
               </div>
@@ -411,7 +385,7 @@ function SensorDashboard() {
         )}
 
         {/* Recommendations Section */}
-        {insights && insights.recs.length > 0 && (
+        {insights && insights.recs?.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <span>📋</span>
@@ -443,7 +417,7 @@ function SensorDashboard() {
         {/* Sensor Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <AnimatePresence>
-            {Object.entries(predictions).map(([sensor, value], index) => {
+            {Object.entries(sensorReadings).map(([sensor, value], index) => {
               const config = sensorConfig[sensor]
               const isAlert = value > config.threshold
               
@@ -466,7 +440,7 @@ function SensorDashboard() {
                         <h3 className="font-semibold text-gray-900 text-sm">
                           {sensor.replace(/_/g, ' ')}
                         </h3>
-                        <p className="text-xs text-gray-500">Next predicted value</p>
+                        <p className="text-xs text-gray-500">Current reading</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -504,9 +478,9 @@ function SensorDashboard() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                   {sensorConfig[selectedSensor].icon} 
-                  {selectedSensor.replace(/_/g, ' ')} Predictions
+                  {selectedSensor.replace(/_/g, ' ')} Trend
                 </h2>
-                <p className="text-gray-600">Real-time LSTM forecasting trend</p>
+                <p className="text-gray-600">Real-time sensor data trend</p>
               </div>
               <select
                 value={selectedSensor}
@@ -572,7 +546,7 @@ function SensorDashboard() {
                     <span className="font-medium">LSTM 50 Units</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Predictions Made:</span>
+                    <span>Data Points:</span>
                     <span className="font-medium">{historicalData.length}</span>
                   </div>
                   <div className="flex justify-between">
