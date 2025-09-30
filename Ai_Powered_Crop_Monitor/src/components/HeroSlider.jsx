@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 const slides = [
-  { id: 1, url: "/farm-bg.jpg", alt: "Field overview" },
-  { id: 2, url: "/tractor.jpg", alt: "Tractor in the field" },
-  { id: 3, url: "/gem.png", alt: "Insights visualization" },
+  { id: 1, url: "/i5.jpg", alt: "Field overview" },
+  { id: 2, url: "/i2.jpg", alt: "Tractor in the field" },
+  { id: 3, url: "/i3.jpg", alt: "Insights visualization" },
 ];
 
 function HeroSlider() {
@@ -26,7 +26,13 @@ function HeroSlider() {
           <div
             key={s.id}
             className={`absolute inset-0 transition-opacity duration-700 ease-out ${i === index ? "opacity-100" : "opacity-0"}`}
-            style={{ backgroundImage: `url(${s.url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+            style={{ 
+              backgroundImage: `url(${s.url})`, 
+              backgroundSize: "cover", 
+              backgroundPosition: "center",
+              imageRendering: "high-quality",
+              WebkitImageRendering: "high-quality"
+            }}
             role="img"
             aria-label={s.alt}
           />
